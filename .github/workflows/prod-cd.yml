@@ -6,7 +6,7 @@ on:
       - published
 
 env:
-  PROJECT_NAME: territorial_division
+  PROJECT_NAME: territorial-division
   REGISTRY_BASE: us-docker.pkg.dev/${{ secrets.GCP_PROJECT }}
 
 jobs:
