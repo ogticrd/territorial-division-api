@@ -1,0 +1,78 @@
+name: Prod Deployment
+
+on:
+  release:
+    types:
+      - published
+
+env:
+  PROJECT_NAME: territorial_division
+  REGISTRY_BASE: us-docker.pkg.dev/${{ secrets.GCP_PROJECT }}
+
+jobs:
+  versioning:
+    name: Versioning
+    runs-on: ubuntu-latest
+    outputs:
+      api_version: ${{ steps.set.outputs.api_version }}
+    steps:
+      - name: Getting API Version
+        id: get
+        uses: actions/github-script@v4
+        with:
+          result-encoding: string
+          script: |
+            return context.payload.release.tag_name.substring(0,2)
+
+      - name: Setting API Version
+        id: set
+        run: echo "::set-output name=api_version::${{ steps.get.outputs.result }}"
+
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: versioning
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GAR
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY_BASE}}
+          username: _json_key
+          password: ${{ secrets.GAR_JSON_KEY }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ env.REGISTRY_BASE}}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }}
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy:
+    name: Deploying Service to CloudRun
+    needs: ["build", "versioning"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Deploy
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          image: ${{ env.REGISTRY_BASE}}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }}
+          service: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.api_version }}
+          credentials: ${{ secrets.GAR_JSON_KEY }}
+          region: ${{ secrets.GCP_REGION }}
+          env_vars: DB_HOST=${{ secrets.DB_HOST }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }},HASH_CONVERT_SERVICE_URI=${{ secrets.HASH_CONVERT_SERVICE_URI }},JCE_CITIZENS_API=${{ secrets.JCE_CITIZENS_API }}
+
+      - name: Testing Service By Curl
+        run: curl "${{ steps.deploy.outputs.url }}"
