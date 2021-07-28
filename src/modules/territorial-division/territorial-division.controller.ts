@@ -32,31 +32,27 @@ export class TerritorialDivisionController {
   }
 
   @Get('municipalities')
-  getMunicipalities(
-    @Query() query?: QueryLocationDto,
-  ): Promise<Municipality[]> {
+  getMunicipalities(@Query() query?: QueryLocationDto) {
     return this.territorialDivisionService.getMunicipalities(query);
   }
 
   @Get('districts')
-  getDistricts(@Query() query?: QueryLocationDto): Promise<District[]> {
+  getDistricts(@Query() query?: QueryLocationDto) {
     return this.territorialDivisionService.getDistricts(query);
   }
 
   @Get('sections')
-  getSections(@Query() query?: QueryLocationDto): Promise<Section[]> {
+  getSections(@Query() query?: QueryLocationDto) {
     return this.territorialDivisionService.getSections(query);
   }
 
   @Get('neighborhoods')
-  getNeighborhoods(@Query() query?: QueryLocationDto): Promise<Neighborhood[]> {
+  getNeighborhoods(@Query() query?: QueryLocationDto) {
     return this.territorialDivisionService.getNeighborhoods(query);
   }
 
   @Get('sub-neighborhoods')
-  getSubNeighborhoods(
-    @Query() query?: QueryLocationDto,
-  ): Promise<SubNeighborhood[]> {
+  getSubNeighborhoods(@Query() query?: QueryLocationDto) {
     return this.territorialDivisionService.getSubNeighborhoods(query);
   }
 
