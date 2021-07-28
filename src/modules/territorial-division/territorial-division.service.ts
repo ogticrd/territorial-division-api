@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 import {
   Region,
@@ -30,13 +30,31 @@ export class TerritorialDivisionService {
     private readonly subNeighborhoodRepo: Repository<SubNeighborhood>,
   ) {}
 
-  async getRegions(): Promise<Region[]> {
-    return await this.regionRepo.find();
+  async getRegions(
+    name?: string,
+    code?: string,
+    id?: number,
+  ): Promise<Region[]> {
+    let condition = {};
+
+    if (name) {
+      condition['where'] = { name: Like(`%${name}%`) };
+    }
+
+    if (code) {
+      condition['where'] = { code };
+    }
+
+    if (id) {
+      condition['where'] = { id };
+    }
+
+    return await this.regionRepo.find(condition);
   }
 
-  async getRegion(regionId: number): Promise<Region> {
-    return await this.regionRepo.findOne(regionId);
-  }
+  //   async getRegion(regionId: number): Promise<Region> {
+  //     return await this.regionRepo.findOne(regionId);
+  //   }
 
   async getProvinces(): Promise<Province[]> {
     return await this.provinceRepo.find();

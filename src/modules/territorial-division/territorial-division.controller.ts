@@ -1,6 +1,6 @@
 import { EnvelopInterceptor } from '@common/interceptors';
-import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
+import { ApiTags, ApiQuery } from '@nestjs/swagger';
 
 import {
   District,
@@ -20,15 +20,31 @@ export class TerritorialDivisionController {
     private readonly territorialDivisionService: TerritorialDivisionService,
   ) {}
 
+  @ApiQuery({
+    name: 'name',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'id',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'code',
+    required: false,
+  })
   @Get('regions')
-  getRegions() {
-    return this.territorialDivisionService.getRegions();
+  getRegions(
+    @Query('name') name?: string,
+    @Query('id') id?: number,
+    @Query('code') code?: string,
+  ) {
+    return this.territorialDivisionService.getRegions(name, code, id);
   }
 
-  @Get('regions/:regionId')
-  getRegion(@Param('regionId') regionId: number) {
-    return this.territorialDivisionService.getRegion(regionId);
-  }
+  //   @Get('regions/:regionId')
+  //   getRegion(@Param('regionId') regionId: number) {
+  //     return this.territorialDivisionService.getRegion(regionId);
+  //   }
 
   @Get('provinces')
   getProvinces() {
@@ -193,4 +209,12 @@ export class TerritorialDivisionController {
       subNeighborhoodId,
     );
   }
+}
+function ApiImplicitQuery(arg0: {
+  name: string;
+  description: string;
+  required: boolean;
+  type: NumberConstructor;
+}) {
+  throw new Error('Function not implemented.');
 }
