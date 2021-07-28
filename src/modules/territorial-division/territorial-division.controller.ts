@@ -1,6 +1,7 @@
 import { EnvelopInterceptor } from '@common/interceptors';
 import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
-import { ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
+import { QueryLocationDto } from './dto';
 
 import {
   District,
@@ -20,90 +21,43 @@ export class TerritorialDivisionController {
     private readonly territorialDivisionService: TerritorialDivisionService,
   ) {}
 
-  @ApiQuery({
-    name: 'name',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'id',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'code',
-    required: false,
-  })
   @Get('regions')
-  getRegions(
-    @Query('name') name?: string,
-    @Query('id') id?: number,
-    @Query('code') code?: string,
-  ) {
-    return this.territorialDivisionService.getRegions(name, code, id);
+  getRegions(@Query() query?: QueryLocationDto) {
+    return this.territorialDivisionService.getRegions(query);
   }
-
-  //   @Get('regions/:regionId')
-  //   getRegion(@Param('regionId') regionId: number) {
-  //     return this.territorialDivisionService.getRegion(regionId);
-  //   }
 
   @Get('provinces')
-  getProvinces() {
-    return this.territorialDivisionService.getProvinces();
-  }
-
-  @Get('provinces/:provinceId')
-  getProvince(provinceId: number): Promise<Province> {
-    return this.territorialDivisionService.getProvince(provinceId);
+  getProvinces(@Query() query?: QueryLocationDto) {
+    return this.territorialDivisionService.getProvinces(query);
   }
 
   @Get('municipalities')
-  getMunicipalities(): Promise<Municipality[]> {
-    return this.territorialDivisionService.getMunicipalities();
-  }
-
-  @Get('municipalities/:municipalityId')
-  getMunicipality(municipalityId: number): Promise<Municipality> {
-    return this.territorialDivisionService.getMunicipality(municipalityId);
-  }
-
-  @Get('districts/:districtId')
-  getDistrict(districtId: number): Promise<District> {
-    return this.territorialDivisionService.getDistrict(districtId);
+  getMunicipalities(
+    @Query() query?: QueryLocationDto,
+  ): Promise<Municipality[]> {
+    return this.territorialDivisionService.getMunicipalities(query);
   }
 
   @Get('districts')
-  getDistricts(): Promise<District[]> {
-    return this.territorialDivisionService.getDistricts();
-  }
-
-  @Get('sections/:sectionId')
-  getSection(sectionId: number): Promise<Section> {
-    return this.territorialDivisionService.getSection(sectionId);
+  getDistricts(@Query() query?: QueryLocationDto): Promise<District[]> {
+    return this.territorialDivisionService.getDistricts(query);
   }
 
   @Get('sections')
-  getSections(): Promise<Section[]> {
-    return this.territorialDivisionService.getSections();
-  }
-
-  @Get('neighborhoods/:neighborhoodId')
-  getNeighborhood(neighborhoodId: number): Promise<Neighborhood> {
-    return this.territorialDivisionService.getNeighborhood(neighborhoodId);
+  getSections(@Query() query?: QueryLocationDto): Promise<Section[]> {
+    return this.territorialDivisionService.getSections(query);
   }
 
   @Get('neighborhoods')
-  getNeighborhoods(): Promise<Neighborhood[]> {
-    return this.territorialDivisionService.getNeighborhoods();
+  getNeighborhoods(@Query() query?: QueryLocationDto): Promise<Neighborhood[]> {
+    return this.territorialDivisionService.getNeighborhoods(query);
   }
 
-  @Get('subneighborhoods/:subneighborhoodId')
-  getSubNeighborhood(neighborhoodId: number): Promise<SubNeighborhood> {
-    return this.territorialDivisionService.getSubNeighborhood(neighborhoodId);
-  }
-
-  @Get('subneighborhoods')
-  getSubNeighborhoods(): Promise<SubNeighborhood[]> {
-    return this.territorialDivisionService.getSubNeighborhoods();
+  @Get('sub-neighborhoods')
+  getSubNeighborhoods(
+    @Query() query?: QueryLocationDto,
+  ): Promise<SubNeighborhood[]> {
+    return this.territorialDivisionService.getSubNeighborhoods(query);
   }
 
   @Get('regions/:regionId/provinces')
@@ -190,7 +144,7 @@ export class TerritorialDivisionController {
     );
   }
 
-  @Get('neighborhoods/:neighborhoodId/subNeighborhoods')
+  @Get('neighborhoods/:neighborhoodId/sub-neighborhoods')
   getNeighborhoodSubNeighborhoods(
     @Param('neighborhoodId') neighborhoodId: number,
   ) {
@@ -199,7 +153,7 @@ export class TerritorialDivisionController {
     );
   }
 
-  @Get('neighborhoods/:neighborhoodId/subNeighborhoods/:subNeighborhoodId')
+  @Get('neighborhoods/:neighborhoodId/sub-neighborhoods/:subNbeighborhoodId')
   getNeighborhoodSubNeighborhood(
     @Param('neighborhoodId') neighborhoodId: number,
     @Param('subNeighborhoodId') subNeighborhoodId: number,
@@ -209,12 +163,4 @@ export class TerritorialDivisionController {
       subNeighborhoodId,
     );
   }
-}
-function ApiImplicitQuery(arg0: {
-  name: string;
-  description: string;
-  required: boolean;
-  type: NumberConstructor;
-}) {
-  throw new Error('Function not implemented.');
 }

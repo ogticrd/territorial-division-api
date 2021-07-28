@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { QueryLocationDto } from './dto';
 
 import {
   Region,
@@ -30,78 +31,178 @@ export class TerritorialDivisionService {
     private readonly subNeighborhoodRepo: Repository<SubNeighborhood>,
   ) {}
 
-  async getRegions(
-    name?: string,
-    code?: string,
-    id?: number,
-  ): Promise<Region[]> {
-    let condition = {};
+  async getRegions(query?: QueryLocationDto): Promise<Region[]> {
+    const regions = this.regionRepo.createQueryBuilder();
 
-    if (name) {
-      condition['where'] = { name: Like(`%${name}%`) };
+    if (query.name) {
+      regions.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
     }
 
-    if (code) {
-      condition['where'] = { code };
+    if (query.code) {
+      regions.where('code = :code', {
+        code: query.code,
+      });
     }
 
-    if (id) {
-      condition['where'] = { id };
+    if (query.id) {
+      regions.where('id = :id', {
+        id: query.id,
+      });
     }
 
-    return await this.regionRepo.find(condition);
+    return await regions.getMany();
   }
 
-  //   async getRegion(regionId: number): Promise<Region> {
-  //     return await this.regionRepo.findOne(regionId);
-  //   }
+  async getProvinces(query: QueryLocationDto): Promise<Province[]> {
+    const provinces = this.provinceRepo.createQueryBuilder();
 
-  async getProvinces(): Promise<Province[]> {
-    return await this.provinceRepo.find();
+    if (query.name) {
+      provinces.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
+
+    if (query.code) {
+      provinces.where('code = :code', {
+        code: query.code,
+      });
+    }
+
+    if (query.id) {
+      provinces.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await provinces.getMany();
   }
 
-  async getProvince(provinceId: number): Promise<Province> {
-    return await this.provinceRepo.findOne(provinceId);
-  }
+  async getMunicipalities(query?: QueryLocationDto): Promise<Municipality[]> {
+    const municipalities = this.municipalityRepo.createQueryBuilder();
 
-  async getMunicipalities(): Promise<Municipality[]> {
-    return await this.municipalityRepo.find();
-  }
+    if (query.name) {
+      municipalities.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
 
-  async getMunicipality(municipalityId: number): Promise<Municipality> {
-    return await this.municipalityRepo.findOne(municipalityId);
+    if (query.code) {
+      municipalities.where('code = :code', {
+        code: query.code,
+      });
+    }
+
+    if (query.id) {
+      municipalities.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await municipalities.getMany();
   }
 
   async getDistrict(districtId: number): Promise<District> {
     return await this.districtRepo.findOne(districtId);
   }
 
-  async getDistricts(): Promise<District[]> {
-    return await this.districtRepo.find();
+  async getDistricts(query?: QueryLocationDto): Promise<District[]> {
+    const districts = this.districtRepo.createQueryBuilder();
+
+    if (query.name) {
+      districts.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
+
+    if (query.code) {
+      districts.where('code = :code', {
+        code: query.code,
+      });
+    }
+
+    if (query.id) {
+      districts.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await districts.getMany();
   }
 
-  async getSection(sectionId: number): Promise<Section> {
-    return await this.sectionRepo.findOne(sectionId);
+  async getSections(query?: QueryLocationDto): Promise<Section[]> {
+    const sections = this.sectionRepo.createQueryBuilder();
+
+    if (query.name) {
+      sections.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
+
+    if (query.code) {
+      sections.where('code = :code', {
+        code: query.code,
+      });
+    }
+
+    if (query.id) {
+      sections.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await sections.getMany();
   }
 
-  async getSections(): Promise<Section[]> {
-    return await this.sectionRepo.find();
+  async getNeighborhoods(query?: QueryLocationDto): Promise<Neighborhood[]> {
+    const neighborhoods = this.neighborhoodRepo.createQueryBuilder();
+
+    if (query.name) {
+      neighborhoods.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
+
+    if (query.code) {
+      neighborhoods.where('code = :code', {
+        code: query.code,
+      });
+    }
+
+    if (query.id) {
+      neighborhoods.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await neighborhoods.getMany();
   }
 
-  async getNeighborhood(neighborhoodId: number): Promise<Neighborhood> {
-    return await this.neighborhoodRepo.findOne(neighborhoodId);
-  }
+  async getSubNeighborhoods(
+    query?: QueryLocationDto,
+  ): Promise<SubNeighborhood[]> {
+    const subNeighborhoods = this.subNeighborhoodRepo.createQueryBuilder();
 
-  async getNeighborhoods(): Promise<Neighborhood[]> {
-    return await this.neighborhoodRepo.find();
-  }
+    if (query.name) {
+      subNeighborhoods.where('LOWER(name) LIKE :name', {
+        name: `%${query.name.toLowerCase()}%`,
+      });
+    }
 
-  async getSubNeighborhood(neighborhoodId: number): Promise<SubNeighborhood> {
-    return await this.subNeighborhoodRepo.findOne(neighborhoodId);
-  }
+    if (query.code) {
+      subNeighborhoods.where('code = :code', {
+        code: query.code,
+      });
+    }
 
-  async getSubNeighborhoods(): Promise<SubNeighborhood[]> {
-    return await this.subNeighborhoodRepo.find();
+    if (query.id) {
+      subNeighborhoods.where('id = :id', {
+        id: query.id,
+      });
+    }
+
+    return await subNeighborhoods.getMany();
   }
 
   async getRegionProvinces(regionId: number): Promise<Province[]> {
