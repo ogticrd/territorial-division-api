@@ -1,8 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Raw, Repository } from 'typeorm';
-import { QueryLocationDto } from './dto';
+import { Repository } from 'typeorm';
 
+import {
+  ParamDistrictDto,
+  ParamMunicipalityDto,
+  ParamNeighborhoodDto,
+  ParamProvinceDto,
+  ParamRegionDto,
+  ParamSectionDto,
+  ParamSubNeighborhoodDto,
+  QueryDistrictDto,
+  QueryMunicipalityDto,
+  QueryNeighborhoodDto,
+  QueryProvinceDto,
+  QueryRegionDto,
+  QuerySectionDto,
+  QuerySubNeighborhoodDto,
+} from './dto';
 import {
   Region,
   Province,
@@ -12,6 +27,16 @@ import {
   Neighborhood,
   SubNeighborhood,
 } from './entities';
+import { QueryStrategy } from './interfaces';
+import {
+  DistrictStrategy,
+  MunicipalityStrategy,
+  NeighborhoodStrategy,
+  ProvinceStrategy,
+  RegionStrategy,
+  SectionStrategy,
+  SubNeighborhoodStrategy,
+} from './strategies';
 
 @Injectable()
 export class TerritorialDivisionService {
@@ -31,78 +56,70 @@ export class TerritorialDivisionService {
     private readonly subNeighborhoodRepo: Repository<SubNeighborhood>,
   ) {}
 
-  private async findByQuery<T>(
-    repo: Repository<T>,
-    query: QueryLocationDto,
-  ): Promise<T | T[]> {
-    if (query.name) {
-      return repo.find({
-        where: {
-          name: Raw((name) => `LOWER(${name}) Like '%${query.name}%'`),
-        },
-      });
-    }
+  async getRegions(query?: QueryRegionDto): Promise<Region[] | Region> {
+    const strategy: QueryStrategy<Region, QueryRegionDto> =
+      new RegionStrategy();
 
-    if (query.code) {
-      return repo.findOne({
-        where: { code: query.name },
-      });
-    }
-
-    if (query.id) {
-      return repo.findOne(query.id);
-    }
-
-    return repo.find();
+    return await strategy.find(query, this.regionRepo);
   }
 
-  async getRegions(query?: QueryLocationDto): Promise<Region[] | Region> {
-    return await this.findByQuery<Region>(this.regionRepo, query);
-  }
+  async getProvinces(query: QueryProvinceDto): Promise<Province[] | Province> {
+    const strategy: QueryStrategy<Province, QueryProvinceDto> =
+      new ProvinceStrategy();
 
-  async getProvinces(query: QueryLocationDto): Promise<Province[] | Province> {
-    return await this.findByQuery<Province>(this.provinceRepo, query);
+    return await strategy.find(query, this.provinceRepo);
   }
 
   async getMunicipalities(
-    query?: QueryLocationDto,
+    query?: QueryMunicipalityDto,
   ): Promise<Municipality[] | Municipality> {
-    return await this.findByQuery<Municipality>(this.municipalityRepo, query);
+    const strategy: QueryStrategy<Municipality, QueryMunicipalityDto> =
+      new MunicipalityStrategy();
+
+    return await strategy.find(query, this.municipalityRepo);
   }
 
-  async getDistricts(query?: QueryLocationDto): Promise<District[] | District> {
-    return await this.findByQuery<District>(this.districtRepo, query);
+  async getDistricts(query?: QueryDistrictDto): Promise<District[] | District> {
+    const strategy: QueryStrategy<District, QueryDistrictDto> =
+      new DistrictStrategy();
+
+    return await strategy.find(query, this.districtRepo);
   }
 
-  async getSections(query?: QueryLocationDto): Promise<Section[] | Section> {
-    return await this.findByQuery<Section>(this.sectionRepo, query);
+  async getSections(query?: QuerySectionDto): Promise<Section[] | Section> {
+    const strategy: QueryStrategy<Section, QuerySectionDto> =
+      new SectionStrategy();
+
+    return await strategy.find(query, this.sectionRepo);
   }
 
   async getNeighborhoods(
-    query?: QueryLocationDto,
+    query?: QueryNeighborhoodDto,
   ): Promise<Neighborhood[] | Neighborhood> {
-    return await this.findByQuery<Neighborhood>(this.neighborhoodRepo, query);
+    const strategy: QueryStrategy<Neighborhood, QueryNeighborhoodDto> =
+      new NeighborhoodStrategy();
+
+    return await strategy.find(query, this.neighborhoodRepo);
   }
 
   async getSubNeighborhoods(
-    query?: QueryLocationDto,
+    query?: QuerySubNeighborhoodDto,
   ): Promise<SubNeighborhood[] | SubNeighborhood> {
-    return await this.findByQuery<SubNeighborhood>(
-      this.subNeighborhoodRepo,
-      query,
-    );
+    const strategy: QueryStrategy<SubNeighborhood, QuerySubNeighborhoodDto> =
+      new SubNeighborhoodStrategy();
+
+    return await strategy.find(query, this.subNeighborhoodRepo);
   }
 
-  async getRegionProvinces(regionId: number): Promise<Province[]> {
-    return await this.provinceRepo.find({ where: { region: regionId } });
+  async getRegionProvinces(params: ParamRegionDto): Promise<Province[]> {
+    return await this.provinceRepo.find({
+      where: { regionCode: params.regionCode },
+    });
   }
 
-  async getRegionProvince(
-    regionId: number,
-    provinceId: number,
-  ): Promise<Province> {
+  async getRegionProvince(params: ParamProvinceDto): Promise<Province> {
     const province = await this.provinceRepo.findOne({
-      where: { region: regionId, id: provinceId },
+      where: { regionCode: params.regionCode, code: params.provinceCode },
     });
 
     if (!province) {
@@ -112,9 +129,14 @@ export class TerritorialDivisionService {
     return province;
   }
 
-  async getProvinceMunicipalities(provinceId: number): Promise<Municipality[]> {
+  async getProvinceMunicipalities(
+    params: ParamProvinceDto,
+  ): Promise<Municipality[]> {
     const municipalities = await this.municipalityRepo.find({
-      where: { province: provinceId },
+      where: {
+        provinceCode: params.provinceCode,
+        regionCode: params.regionCode,
+      },
     });
 
     if (!municipalities.length) {
@@ -125,11 +147,14 @@ export class TerritorialDivisionService {
   }
 
   async getProvinceMunicipality(
-    provinceId: number,
-    municipalityId: number,
+    params: ParamMunicipalityDto,
   ): Promise<Municipality> {
     const municipality = await this.municipalityRepo.findOne({
-      where: { province: provinceId, id: municipalityId },
+      where: {
+        provinceCode: params.provinceCode,
+        code: params.municipalityCode,
+        regionCode: params.regionCode,
+      },
     });
 
     if (!municipality) {
@@ -139,9 +164,15 @@ export class TerritorialDivisionService {
     return municipality;
   }
 
-  async getMunicipalityDistricts(municipalityId: number): Promise<District[]> {
+  async getMunicipalityDistricts(
+    params: ParamMunicipalityDto,
+  ): Promise<District[]> {
     const districts = await this.districtRepo.find({
-      where: { municipality: municipalityId },
+      where: {
+        provinceCode: params.provinceCode,
+        municipalityCode: params.municipalityCode,
+        regionCode: params.regionCode,
+      },
     });
 
     if (!districts.length) {
@@ -151,12 +182,14 @@ export class TerritorialDivisionService {
     return districts;
   }
 
-  async getMunicipalityDistrict(
-    municipalityId: number,
-    districtId: number,
-  ): Promise<District> {
+  async getMunicipalityDistrict(params: ParamDistrictDto): Promise<District> {
     const disctrict = await this.districtRepo.findOne({
-      where: { municipality: municipalityId, id: districtId },
+      where: {
+        provinceCode: params.provinceCode,
+        code: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+      },
     });
 
     if (!disctrict) {
@@ -166,9 +199,14 @@ export class TerritorialDivisionService {
     return disctrict;
   }
 
-  async getDisctrictSections(districtId: number): Promise<Section[]> {
+  async getDisctrictSections(params: ParamDistrictDto): Promise<Section[]> {
     const sections = await this.sectionRepo.find({
-      where: { district: districtId },
+      where: {
+        provinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+      },
     });
 
     if (!sections.length) {
@@ -178,12 +216,15 @@ export class TerritorialDivisionService {
     return sections;
   }
 
-  async getDistrictSection(
-    districtId: number,
-    sectionId: number,
-  ): Promise<Section> {
+  async getDistrictSection(params: ParamSectionDto): Promise<Section> {
     const section = await this.sectionRepo.findOne({
-      where: { district: districtId, id: sectionId },
+      where: {
+        provinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+        code: params.sectionCode,
+      },
     });
 
     if (!section) {
@@ -193,9 +234,17 @@ export class TerritorialDivisionService {
     return section;
   }
 
-  async getSectionNeighborhoods(sectionId: number): Promise<Neighborhood[]> {
+  async getSectionNeighborhoods(
+    params: ParamSectionDto,
+  ): Promise<Neighborhood[]> {
     const neighborhoods = await this.neighborhoodRepo.find({
-      where: { section: sectionId },
+      where: {
+        provinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+        sectionCode: params.sectionCode,
+      },
     });
 
     if (!neighborhoods.length) {
@@ -206,11 +255,17 @@ export class TerritorialDivisionService {
   }
 
   async getSectionNeighborhood(
-    sectionId: number,
-    neighborhoodId: number,
+    params: ParamNeighborhoodDto,
   ): Promise<Neighborhood> {
     const neighborhood = await this.neighborhoodRepo.findOne({
-      where: { section: sectionId, id: neighborhoodId },
+      where: {
+        provinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+        sectionCode: params.sectionCode,
+        code: params.neighborhoodCode,
+      },
     });
 
     if (!neighborhood) {
@@ -221,10 +276,17 @@ export class TerritorialDivisionService {
   }
 
   async getNeighborhoodSubNeighborhoods(
-    neighborhoodId: number,
+    params: ParamNeighborhoodDto,
   ): Promise<SubNeighborhood[]> {
     const subNeighborhoods = await this.subNeighborhoodRepo.find({
-      where: { neighborhood: neighborhoodId },
+      where: {
+        provinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+        sectionCode: params.sectionCode,
+        neighborhoodCode: params.neighborhoodCode,
+      },
     });
 
     if (!subNeighborhoods.length) {
@@ -235,11 +297,18 @@ export class TerritorialDivisionService {
   }
 
   async getNeighborhoodSubNeighborhood(
-    neighborhoodId: number,
-    subNeighborhoodId: number,
+    params: ParamSubNeighborhoodDto,
   ): Promise<SubNeighborhood> {
     const subNeighborhood = await this.subNeighborhoodRepo.findOne({
-      where: { neighborhood: neighborhoodId, id: subNeighborhoodId },
+      where: {
+        neighborprovinceCode: params.provinceCode,
+        districtCode: params.districtCode,
+        regionCode: params.regionCode,
+        municipalityCode: params.municipalityCode,
+        sectionCode: params.sectionCode,
+        neighborhoodCode: params.neighborhoodCode,
+        code: params.subNeighborhoodCode,
+      },
     });
 
     if (!subNeighborhood) {
