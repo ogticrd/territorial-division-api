@@ -1,16 +1,30 @@
-import { EnvelopInterceptor } from '@common/interceptors';
+import { EnvelopInterceptor, TransformInterceptor } from '@common/interceptors';
 import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { QueryLocationDto } from './dto';
 
 import {
-  District,
-  Municipality,
-  Neighborhood,
-  Province,
-  Section,
-  SubNeighborhood,
-} from './entities';
+  ParamDistrictDto,
+  ParamMunicipalityDto,
+  ParamNeighborhoodDto,
+  ParamProvinceDto,
+  ParamRegionDto,
+  ParamSectionDto,
+  ParamSubNeighborhoodDto,
+  QueryDistrictDto,
+  QueryMunicipalityDto,
+  QueryNeighborhoodDto,
+  QueryProvinceDto,
+  QueryRegionDto,
+  QuerySectionDto,
+  QuerySubNeighborhoodDto,
+  ResponseDistrictDto,
+  ResponseMunicipalityDto,
+  ResponseNeighborhoodDto,
+  ResponseProvinceDto,
+  ResponseRegionDto,
+  ResponseSectionDto,
+  ResponseSubNeighborhoodDto,
+} from './dto';
 import { TerritorialDivisionService } from './territorial-division.service';
 
 @Controller('territories')
@@ -22,141 +36,138 @@ export class TerritorialDivisionController {
   ) {}
 
   @Get('regions')
-  getRegions(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseRegionDto))
+  getRegions(@Query() query?: QueryRegionDto) {
     return this.territorialDivisionService.getRegions(query);
   }
 
   @Get('provinces')
-  getProvinces(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseProvinceDto))
+  getProvinces(@Query() query?: QueryProvinceDto) {
     return this.territorialDivisionService.getProvinces(query);
   }
 
   @Get('municipalities')
-  getMunicipalities(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseMunicipalityDto))
+  getMunicipalities(@Query() query?: QueryMunicipalityDto) {
     return this.territorialDivisionService.getMunicipalities(query);
   }
 
   @Get('districts')
-  getDistricts(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseDistrictDto))
+  getDistricts(@Query() query?: QueryDistrictDto) {
     return this.territorialDivisionService.getDistricts(query);
   }
 
   @Get('sections')
-  getSections(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseSectionDto))
+  getSections(@Query() query?: QuerySectionDto) {
     return this.territorialDivisionService.getSections(query);
   }
 
   @Get('neighborhoods')
-  getNeighborhoods(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseNeighborhoodDto))
+  getNeighborhoods(@Query() query?: QueryNeighborhoodDto) {
     return this.territorialDivisionService.getNeighborhoods(query);
   }
 
   @Get('sub-neighborhoods')
-  getSubNeighborhoods(@Query() query?: QueryLocationDto) {
+  @UseInterceptors(new TransformInterceptor(ResponseSubNeighborhoodDto))
+  getSubNeighborhoods(@Query() query?: QuerySubNeighborhoodDto) {
     return this.territorialDivisionService.getSubNeighborhoods(query);
   }
 
-  @Get('regions/:regionId/provinces')
-  getRegionProvinces(@Param('regionId') regionId: number) {
-    return this.territorialDivisionService.getRegionProvinces(regionId);
+  @Get('regions/:regionCode/provinces')
+  @UseInterceptors(new TransformInterceptor(ResponseProvinceDto))
+  getRegionProvinces(@Param() params: ParamRegionDto) {
+    return this.territorialDivisionService.getRegionProvinces(params);
   }
 
-  @Get('regions/:regionId/provinces/:provinceId')
-  getRegionProvince(
-    @Param('regionId') regionId: number,
-    @Param('provinceId') provinceId: number,
-  ) {
-    return this.territorialDivisionService.getRegionProvince(
-      regionId,
-      provinceId,
-    );
+  @Get('regions/:regionCode/provinces/:provinceCode')
+  @UseInterceptors(new TransformInterceptor(ResponseProvinceDto))
+  getRegionProvince(@Param() params: ParamProvinceDto) {
+    return this.territorialDivisionService.getRegionProvince(params);
   }
 
-  @Get('provinces/:provinceId/municipalities')
-  getProvinceMunicipalities(@Param('provinceId') provinceId: number) {
-    return this.territorialDivisionService.getProvinceMunicipalities(
-      provinceId,
-    );
+  @Get('regions/:regionCode/provinces/:provinceCode/municipalities')
+  @UseInterceptors(new TransformInterceptor(ResponseMunicipalityDto))
+  getProvinceMunicipalities(@Param() params: ParamProvinceDto) {
+    return this.territorialDivisionService.getProvinceMunicipalities(params);
   }
 
-  @Get('provinces/:provinceId/municipalities/:municipalityId')
-  getProvinceMunicipality(
-    @Param('provinceId') provinceId: number,
-    @Param('municipalityId') municipalityId: number,
-  ) {
-    return this.territorialDivisionService.getProvinceMunicipality(
-      provinceId,
-      municipalityId,
-    );
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseMunicipalityDto))
+  getProvinceMunicipality(@Param() params: ParamMunicipalityDto) {
+    return this.territorialDivisionService.getProvinceMunicipality(params);
   }
 
-  @Get('municipalities/:municipalityId/districts')
-  getMunicipalityDistricts(@Param('municipalityId') municipalityId: number) {
-    return this.territorialDivisionService.getMunicipalityDistricts(
-      municipalityId,
-    );
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseDistrictDto))
+  getMunicipalityDistricts(@Param() params: ParamMunicipalityDto) {
+    return this.territorialDivisionService.getMunicipalityDistricts(params);
   }
 
-  @Get('municipalities/:municipalityId/districts/:districtId')
-  getMunicipalityDistrict(
-    @Param('municipalityId') municipalityId: number,
-    @Param('districtId') districtId: number,
-  ) {
-    return this.territorialDivisionService.getMunicipalityDistrict(
-      municipalityId,
-      districtId,
-    );
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseDistrictDto))
+  getMunicipalityDistrict(@Param() params: ParamDistrictDto) {
+    return this.territorialDivisionService.getMunicipalityDistrict(params);
   }
 
-  @Get('districts/:districtId/sections')
-  getDisctrictSections(@Param('districtId') districtId: number) {
-    return this.territorialDivisionService.getDisctrictSections(districtId);
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseSectionDto))
+  getDisctrictSections(@Param() params: ParamDistrictDto) {
+    return this.territorialDivisionService.getDisctrictSections(params);
   }
 
-  @Get('districts/:districtId/sections/:sectionId')
-  getDisctrictSection(
-    @Param('districtId') districtId: number,
-    @Param('sectionId') sectionId: number,
-  ) {
-    return this.territorialDivisionService.getDistrictSection(
-      districtId,
-      sectionId,
-    );
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections/:sectionCode',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseSectionDto))
+  getDisctrictSection(@Param() params: ParamSectionDto) {
+    return this.territorialDivisionService.getDistrictSection(params);
   }
 
-  @Get('sections/:sectionId/neighborhoods')
-  getSectionNeighborhoods(@Param('sectionId') sectionId: number) {
-    return this.territorialDivisionService.getSectionNeighborhoods(sectionId);
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections/:sectionCode/neighborhoods',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseNeighborhoodDto))
+  getSectionNeighborhoods(@Param() params: ParamSectionDto) {
+    return this.territorialDivisionService.getSectionNeighborhoods(params);
   }
 
-  @Get('sections/:sectionId/neighborhoods/:neighborhoodId')
-  getSectionNeighborhood(
-    @Param('sectionId') sectionId: number,
-    @Param('neighborhoodId') neighborhoodId: number,
-  ) {
-    return this.territorialDivisionService.getSectionNeighborhood(
-      sectionId,
-      neighborhoodId,
-    );
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections/:sectionCode/neighborhoods/:neighborhoodCode',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseNeighborhoodDto))
+  getSectionNeighborhood(@Param() params: ParamNeighborhoodDto) {
+    return this.territorialDivisionService.getSectionNeighborhood(params);
   }
 
-  @Get('neighborhoods/:neighborhoodId/sub-neighborhoods')
-  getNeighborhoodSubNeighborhoods(
-    @Param('neighborhoodId') neighborhoodId: number,
-  ) {
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections/:sectionCode/neighborhoods/:neighborhoodCode/sub-neighborhoods',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseSubNeighborhoodDto))
+  getNeighborhoodSubNeighborhoods(@Param() params: ParamNeighborhoodDto) {
     return this.territorialDivisionService.getNeighborhoodSubNeighborhoods(
-      neighborhoodId,
+      params,
     );
   }
 
-  @Get('neighborhoods/:neighborhoodId/sub-neighborhoods/:subNbeighborhoodId')
-  getNeighborhoodSubNeighborhood(
-    @Param('neighborhoodId') neighborhoodId: number,
-    @Param('subNeighborhoodId') subNeighborhoodId: number,
-  ) {
+  @Get(
+    'regions/:regionCode/provinces/:provinceCode/municipalities/:municipalityCode/districts/:districtCode/sections/:sectionCode/neighborhoods/:neighborhoodCode/sub-neighborhoods/:subNbeighborhoodCode',
+  )
+  @UseInterceptors(new TransformInterceptor(ResponseSubNeighborhoodDto))
+  getNeighborhoodSubNeighborhood(@Param() params: ParamSubNeighborhoodDto) {
     return this.territorialDivisionService.getNeighborhoodSubNeighborhood(
-      neighborhoodId,
-      subNeighborhoodId,
+      params,
     );
   }
 }
