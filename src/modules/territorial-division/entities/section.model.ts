@@ -1,14 +1,18 @@
-import { Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 import { BaseModel } from './base.model';
-import { District } from './district.model';
-import { Neighborhood } from './neighborhood.model';
 
-@Entity()
+@Entity({ name: 'sections' })
 export class Section extends BaseModel {
-  @ManyToOne(() => District, (district) => district.section)
-  district: District;
+  @Column()
+  districtCode: string;
 
-  @OneToMany(() => Neighborhood, (neighborhood) => neighborhood.section)
-  neighborhood: Neighborhood;
+  @Column()
+  municipalityCode: string;
+
+  @Column()
+  provinceCode: string;
+
+  @Column()
+  regionCode: string;
 }
