@@ -11,12 +11,10 @@ import { map } from 'rxjs/operators';
 export class EnvelopInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data: any) => {
-        return {
-          valid: true,
-          payload: data,
-        };
-      }),
+      map((data: any) => ({
+        valid: true,
+        payload: data,
+      })),
     );
   }
 }
