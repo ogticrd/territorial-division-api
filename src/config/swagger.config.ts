@@ -18,5 +18,5 @@ export const configSwagger = (app: INestApplication) => {
 
   const document = SwaggerModule.createDocument(app, options);
 
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('territories/api', app, document);
 };
