@@ -21,6 +21,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.enableVersioning();
 
   configSwagger(app);
 

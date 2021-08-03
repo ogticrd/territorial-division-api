@@ -27,7 +27,10 @@ import {
 } from './dto';
 import { TerritorialDivisionService } from './territorial-division.service';
 
-@Controller('territories')
+@Controller({
+  path: 'territories',
+  version: '1',
+})
 @ApiTags('Territorial Division')
 @UseInterceptors(EnvelopInterceptor)
 export class TerritorialDivisionController {
