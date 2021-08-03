@@ -60,14 +60,32 @@ export class TerritorialDivisionService {
     const strategy: QueryStrategy<Region, QueryRegionDto> =
       new RegionStrategy();
 
-    return await strategy.find(query, this.regionRepo);
+    const regions = await strategy.find(query, this.regionRepo);
+
+    if (!regions) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'Region not found',
+      });
+    }
+
+    return regions;
   }
 
   async getProvinces(query: QueryProvinceDto): Promise<Province[] | Province> {
     const strategy: QueryStrategy<Province, QueryProvinceDto> =
       new ProvinceStrategy();
 
-    return await strategy.find(query, this.provinceRepo);
+    const provinces = await strategy.find(query, this.provinceRepo);
+
+    if (!provinces) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'Province not found',
+      });
+    }
+
+    return provinces;
   }
 
   async getMunicipalities(
@@ -76,21 +94,48 @@ export class TerritorialDivisionService {
     const strategy: QueryStrategy<Municipality, QueryMunicipalityDto> =
       new MunicipalityStrategy();
 
-    return await strategy.find(query, this.municipalityRepo);
+    const municipalities = await strategy.find(query, this.municipalityRepo);
+
+    if (!municipalities) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'Municipality not found',
+      });
+    }
+
+    return municipalities;
   }
 
   async getDistricts(query?: QueryDistrictDto): Promise<District[] | District> {
     const strategy: QueryStrategy<District, QueryDistrictDto> =
       new DistrictStrategy();
 
-    return await strategy.find(query, this.districtRepo);
+    const districts = await strategy.find(query, this.districtRepo);
+
+    if (!districts) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'District not found',
+      });
+    }
+
+    return districts;
   }
 
   async getSections(query?: QuerySectionDto): Promise<Section[] | Section> {
     const strategy: QueryStrategy<Section, QuerySectionDto> =
       new SectionStrategy();
 
-    return await strategy.find(query, this.sectionRepo);
+    const sections = await strategy.find(query, this.sectionRepo);
+
+    if (!sections) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'Section not found',
+      });
+    }
+
+    return sections;
   }
 
   async getNeighborhoods(
@@ -99,7 +144,16 @@ export class TerritorialDivisionService {
     const strategy: QueryStrategy<Neighborhood, QueryNeighborhoodDto> =
       new NeighborhoodStrategy();
 
-    return await strategy.find(query, this.neighborhoodRepo);
+    const neighborhoods = await strategy.find(query, this.neighborhoodRepo);
+
+    if (!neighborhoods) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'Neighborhood not found',
+      });
+    }
+
+    return neighborhoods;
   }
 
   async getSubNeighborhoods(
@@ -108,7 +162,19 @@ export class TerritorialDivisionService {
     const strategy: QueryStrategy<SubNeighborhood, QuerySubNeighborhoodDto> =
       new SubNeighborhoodStrategy();
 
-    return await strategy.find(query, this.subNeighborhoodRepo);
+    const subNeighborhoods = await strategy.find(
+      query,
+      this.subNeighborhoodRepo,
+    );
+
+    if (!subNeighborhoods) {
+      throw new NotFoundException({
+        valid: false,
+        message: 'SubNeighborhood not found',
+      });
+    }
+
+    return subNeighborhoods;
   }
 
   async getRegionProvinces(params: ParamRegionDto): Promise<Province[]> {
