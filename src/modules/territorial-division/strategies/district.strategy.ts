@@ -25,6 +25,12 @@ export class DistrictStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.municipalityCode) {
       return repository.find({
         where: { municipalityCode: query.municipalityCode },

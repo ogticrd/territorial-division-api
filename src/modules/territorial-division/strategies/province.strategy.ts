@@ -25,6 +25,12 @@ export class ProvinceStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.regionCode) {
       return repository.find({
         where: { regionCode: query.regionCode },

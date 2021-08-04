@@ -9,4 +9,7 @@ export class BaseModel {
 
   @Column()
   name: string;
+
+  @Column()
+  identifier: string;
 }

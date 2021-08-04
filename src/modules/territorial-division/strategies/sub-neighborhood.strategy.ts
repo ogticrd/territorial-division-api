@@ -25,6 +25,12 @@ export class SubNeighborhoodStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.neighborhoodCode) {
       return repository.find({
         where: { neighborhoodCode: query.neighborhoodCode },

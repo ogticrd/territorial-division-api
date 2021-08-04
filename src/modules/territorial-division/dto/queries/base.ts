@@ -11,4 +11,9 @@ export class QueryBase {
   @IsOptional()
   @ApiProperty({ required: false })
   code: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  identifier: string;
 }

@@ -25,6 +25,12 @@ export class SectionStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.districtCode) {
       return repository.find({
         where: { districtCode: query.districtCode },

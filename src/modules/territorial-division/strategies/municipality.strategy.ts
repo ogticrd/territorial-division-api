@@ -25,6 +25,12 @@ export class MunicipalityStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.provinceCode) {
       return repository.find({
         where: { provinceCode: query.provinceCode },

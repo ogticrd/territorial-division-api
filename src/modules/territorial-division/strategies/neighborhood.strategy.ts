@@ -25,6 +25,12 @@ export class NeighborhoodStrategy
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     if (query.sectionCode) {
       return repository.find({
         where: { sectionCode: query.sectionCode },

@@ -16,7 +16,9 @@ export const configSwagger = (app: INestApplication) => {
     .setVersion(version)
     .build();
 
-  const document = SwaggerModule.createDocument(app, options);
+  const document = SwaggerModule.createDocument(app, options, {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  });
 
   SwaggerModule.setup('v1/territories/api', app, document);
 };

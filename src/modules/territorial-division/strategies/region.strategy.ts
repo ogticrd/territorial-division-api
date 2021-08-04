@@ -23,6 +23,12 @@ export class RegionStrategy implements QueryStrategy<Region, QueryRegionDto> {
       });
     }
 
+    if (query.identifier) {
+      return repository.findOne({
+        where: { identifier: query.identifier },
+      });
+    }
+
     return repository.find();
   }
 }

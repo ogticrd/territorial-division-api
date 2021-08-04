@@ -12,4 +12,9 @@ export class ResponseBase {
   @Expose()
   @ApiProperty({ required: false })
   code: string;
+
+  @IsString()
+  @Expose()
+  @ApiProperty({ required: false })
+  identifier: string;
 }
