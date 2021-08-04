@@ -3,22 +3,21 @@ import { INestApplication } from '@nestjs/common';
 
 const title = 'Territorial Division';
 const description = 'Territorial Division api definition.';
-const version = '1.0';
 
 /**
  * Setup swagger in the application boostrap
  * @param app {INestApplication}
  */
-export const configSwagger = (app: INestApplication) => {
+export const configSwagger = (app: INestApplication, apiVersion: string) => {
   const options = new DocumentBuilder()
     .setTitle(title)
     .setDescription(description)
-    .setVersion(version)
+    .setVersion(apiVersion)
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
   });
 
-  SwaggerModule.setup('v1/territories/api', app, document);
+  SwaggerModule.setup(`${apiVersion}/territories/api`, app, document);
 };

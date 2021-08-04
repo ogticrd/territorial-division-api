@@ -23,7 +23,7 @@ async function bootstrap() {
   );
   app.enableVersioning();
 
-  configSwagger(app);
+  configSwagger(app, AppModule.apiVersion);
 
   await app.listen(AppModule.port);
 }

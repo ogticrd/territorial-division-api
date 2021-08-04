@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { District } from './entities/district.model';
-import { Municipality } from './entities/municipality.model';
-import { Neighborhood } from './entities/neighborhood.model';
-import { Province } from './entities/province.model';
-import { Region } from './entities/region.model';
-import { Section } from './entities/section.model';
-import { SubNeighborhood } from './entities/sub-neighborhood.model';
-import { TerritorialDivisionController } from './territorial-division.controller';
-import { TerritorialDivisionService } from './territorial-division.service';
+/**
+ * V1
+ */
+import { District } from './v1/entities/district.model';
+import { Municipality } from './v1/entities/municipality.model';
+import { Neighborhood } from './v1/entities/neighborhood.model';
+import { Province } from './v1/entities/province.model';
+import { Region } from './v1/entities/region.model';
+import { Section } from './v1/entities/section.model';
+import { SubNeighborhood } from './v1/entities/sub-neighborhood.model';
+import { TerritorialDivisionV1Controller } from './v1/territorial-division-v1.controller';
+import { TerritorialDivisionV1Service } from './v1/territorial-division-v1.service';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { TerritorialDivisionService } from './territorial-division.service';
       SubNeighborhood,
     ]),
   ],
-  controllers: [TerritorialDivisionController],
-  providers: [TerritorialDivisionService],
+  controllers: [TerritorialDivisionV1Controller],
+  providers: [TerritorialDivisionV1Service],
 })
 export class TerritorialDivisionModule {}
