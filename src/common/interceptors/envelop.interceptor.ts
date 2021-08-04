@@ -13,7 +13,7 @@ export class EnvelopInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data: any) => ({
         valid: true,
-        payload: data,
+        data,
       })),
     );
   }
