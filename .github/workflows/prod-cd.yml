@@ -72,7 +72,7 @@ jobs:
           service: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.api_version }}
           credentials: ${{ secrets.GAR_JSON_KEY }}
           region: ${{ secrets.GCP_REGION }}
-          env_vars: DB_HOST=${{ secrets.DB_HOST }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }},HASH_CONVERT_SERVICE_URI=${{ secrets.HASH_CONVERT_SERVICE_URI }},JCE_CITIZENS_API=${{ secrets.JCE_CITIZENS_API }}
+          env_vars: DB_HOST=${{ secrets.DB_HOST }},DB_PORT=${{ secrets.DB_PORT }},DB_USER=${{ secrets.DB_USER }},DB_PASSWORD=${{ secrets.DB_PASSWORD }},DB_NAME=${{ secrets.DB_NAME }},API_VERSION=${{ needs.versioning.outputs.api_version }}
 
       - name: Testing Service By Curl
         run: curl "${{ steps.deploy.outputs.url }}"

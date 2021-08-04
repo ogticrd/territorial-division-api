@@ -39,7 +39,7 @@ import {
 } from './strategies';
 
 @Injectable()
-export class TerritorialDivisionService {
+export class TerritorialDivisionV1Service {
   constructor(
     @InjectRepository(Region) private readonly regionRepo: Repository<Region>,
     @InjectRepository(Province)

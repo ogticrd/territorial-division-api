@@ -25,17 +25,17 @@ import {
   ResponseSectionDto,
   ResponseSubNeighborhoodDto,
 } from './dto';
-import { TerritorialDivisionService } from './territorial-division.service';
+import { TerritorialDivisionV1Service } from './territorial-division-v1.service';
 
 @Controller({
   path: 'territories',
   version: '1',
 })
-@ApiTags('Territorial Division')
+@ApiTags('Territorial Division: Version 1')
 @UseInterceptors(EnvelopInterceptor)
-export class TerritorialDivisionController {
+export class TerritorialDivisionV1Controller {
   constructor(
-    private readonly territorialDivisionService: TerritorialDivisionService,
+    private readonly territorialDivisionService: TerritorialDivisionV1Service,
   ) {}
 
   @Get('regions')
