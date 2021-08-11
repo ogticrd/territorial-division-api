@@ -173,4 +173,9 @@ export class TerritorialDivisionV1Controller {
       params,
     );
   }
+
+  @Get('hierarchy/:code')
+  getTerritorialHierarchy(@Param('code') code: string) {
+    return this.territorialDivisionService.getTerritorialHierarchy(code);
+  }
 }
