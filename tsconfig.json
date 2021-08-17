@@ -10,6 +10,9 @@
       "@database/*": [
         "./src/database/*"
       ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
     },
     "module": "commonjs",
     "declaration": true,
