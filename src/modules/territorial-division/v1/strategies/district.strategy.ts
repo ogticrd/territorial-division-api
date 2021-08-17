@@ -1,4 +1,4 @@
-import { Raw, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { QueryDistrictDto } from '../dto';
 import { District } from '../entities';
@@ -7,48 +7,48 @@ import { QueryStrategy } from '../interfaces';
 export class DistrictStrategy
   implements QueryStrategy<District, QueryDistrictDto>
 {
-  find(
+  async find(
     query: QueryDistrictDto,
     repository: Repository<District>,
   ): Promise<District | District[]> {
+    const queryBuilder = repository.createQueryBuilder();
+
     if (query.name) {
-      return repository.find({
-        where: {
-          name: Raw((name: string) => `LOWER(${name}) Like '%${query.name}%'`),
-        },
+      queryBuilder.where('LOWER(name) like LOWER(:name)', {
+        name: `%${query.name}%`,
       });
     }
 
     if (query.code) {
-      return repository.findOne({
-        where: { code: query.code },
-      });
+      queryBuilder.andWhere('code = :code', { code: query.code });
     }
 
     if (query.identifier) {
-      return repository.findOne({
-        where: { identifier: query.identifier },
+      queryBuilder.andWhere('identifier = :identifier', {
+        identifier: query.identifier,
       });
     }
 
     if (query.municipalityCode) {
-      return repository.find({
-        where: { municipalityCode: query.municipalityCode },
+      queryBuilder.andWhere('"municipalityCode" = :municipalityCode', {
+        municipalityCode: query.municipalityCode,
       });
     }
 
     if (query.provinceCode) {
-      return repository.find({
-        where: { provinceCode: query.provinceCode },
+      queryBuilder.andWhere('"provinceCode" = :provinceCode', {
+        provinceCode: query.provinceCode,
       });
     }
 
     if (query.regionCode) {
-      return repository.find({
-        where: { regionCode: query.regionCode },
+      queryBuilder.andWhere('"regionCode" = :regionCode', {
+        regionCode: query.regionCode,
       });
     }
 
-    return repository.find();
+    const data = await queryBuilder.getMany();
+
+    return data.length === 1 ? data[0] : data;
   }
 }

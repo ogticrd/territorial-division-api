@@ -1,4 +1,4 @@
-import { Raw, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { QuerySubNeighborhoodDto } from '../dto';
 import { SubNeighborhood } from '../entities';
@@ -7,66 +7,66 @@ import { QueryStrategy } from '../interfaces';
 export class SubNeighborhoodStrategy
   implements QueryStrategy<SubNeighborhood, QuerySubNeighborhoodDto>
 {
-  find(
+  async find(
     query: QuerySubNeighborhoodDto,
     repository: Repository<SubNeighborhood>,
   ): Promise<SubNeighborhood | SubNeighborhood[]> {
+    const queryBuilder = repository.createQueryBuilder();
+
     if (query.name) {
-      return repository.find({
-        where: {
-          name: Raw((name: string) => `LOWER(${name}) Like '%${query.name}%'`),
-        },
+      queryBuilder.where('LOWER(name) like LOWER(:name)', {
+        name: `%${query.name}%`,
       });
     }
 
     if (query.code) {
-      return repository.findOne({
-        where: { code: query.code },
-      });
+      queryBuilder.andWhere('code = :code', { code: query.code });
     }
 
     if (query.identifier) {
-      return repository.findOne({
-        where: { identifier: query.identifier },
+      queryBuilder.andWhere('identifier = :identifier', {
+        identifier: query.identifier,
       });
     }
 
     if (query.neighborhoodCode) {
-      return repository.find({
-        where: { neighborhoodCode: query.neighborhoodCode },
+      queryBuilder.andWhere('"neighborhoodCode" = :neighborhoodCode', {
+        neighborhoodCode: query.neighborhoodCode,
       });
     }
 
     if (query.sectionCode) {
-      return repository.find({
-        where: { sectionCode: query.sectionCode },
+      queryBuilder.andWhere('"sectionCode" = :sectionCode', {
+        sectionCode: query.sectionCode,
       });
     }
 
     if (query.districtCode) {
-      return repository.find({
-        where: { districtCode: query.districtCode, take: 100 },
+      queryBuilder.andWhere('"districtCode" = :districtCode', {
+        districtCode: query.districtCode,
       });
     }
 
     if (query.municipalityCode) {
-      return repository.find({
-        where: { municipalityCode: query.municipalityCode, take: 100 },
+      queryBuilder.andWhere('"municipalityCode" = :municipalityCode', {
+        municipalityCode: query.municipalityCode,
       });
     }
 
     if (query.provinceCode) {
-      return repository.find({
-        where: { provinceCode: query.provinceCode, take: 100 },
+      queryBuilder.andWhere('"provinceCode" = :provinceCode', {
+        provinceCode: query.provinceCode,
       });
     }
 
     if (query.regionCode) {
-      return repository.find({
-        where: { regionCode: query.regionCode, take: 100 },
+      queryBuilder.andWhere('"regionCode" = :regionCode', {
+        regionCode: query.regionCode,
       });
     }
 
-    return repository.find({ take: 100 });
+    const data = await queryBuilder.limit(100).getMany();
+
+    return data.length === 1 ? data[0] : data;
   }
 }
