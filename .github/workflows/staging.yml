@@ -35,6 +35,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: yarn install --frozen-lockfile
+        env:
+          NODE_ENV: development
       - run: yarn test
 
   build:
