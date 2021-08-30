@@ -61,4 +61,4 @@ COPY --from=builder /app/package.json ./package.json
 
 EXPOSE ${PORT}
 
-CMD ["dumb-init", "node", "main.js"]
+CMD ["dumb-init", "node", "dist/main.js"]
