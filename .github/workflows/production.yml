@@ -90,6 +90,8 @@ jobs:
           service: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.version }}
           credentials: ${{ secrets.GAR_JSON_KEY }}
           region: ${{ secrets.GCP_REGION }}
+          flags: |
+            --vpc-connector=projects/${{ secrets.GCP_PROJECT }}/locations/${{ secrets.GCP_REGION }}/connectors/${{ secrets.GCP_REGION }}
           env_vars: |
             NODE_ENV=${{ env.NODE_ENV }},
             DB_HOST=${{ secrets.DB_HOST }},
