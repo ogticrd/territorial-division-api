@@ -42,13 +42,13 @@ RUN yarn build
 #####################################
 FROM node:lts-alpine as release
 
-RUN apk add dumb-init
+RUN apk add --no-cache dumb-init
 
 # get the node environment to use
 ARG NODE_ENV
 ENV NODE_ENV ${NODE_ENV:-development}
 
-ENV PORT 80
+ENV PORT 3000
 ENV HOST 0.0.0.0
 
 WORKDIR /app
