@@ -53,7 +53,7 @@ WORKDIR /app
 
 USER node
 
-COPY --chown=node:node --from=build /app/dist ./
+COPY --chown=node:node --from=builder /app/dist ./
 
 EXPOSE ${PORT}
 
