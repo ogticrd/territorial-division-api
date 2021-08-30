@@ -55,7 +55,9 @@ WORKDIR /app
 
 USER node
 
-COPY --chown=node:node --from=builder /app/dist ./
+COPY --from=builder --chown=node:node /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 EXPOSE ${PORT}
 
