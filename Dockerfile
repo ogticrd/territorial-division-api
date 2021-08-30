@@ -42,6 +42,8 @@ RUN yarn build
 #####################################
 FROM node:lts-alpine as release
 
+RUN apk add dumb-init
+
 # get the node environment to use
 ARG NODE_ENV
 ENV NODE_ENV ${NODE_ENV:-development}
