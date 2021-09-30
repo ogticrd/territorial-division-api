@@ -5,18 +5,18 @@ on:
     branches:
       - "*"
     paths:
-      - '**.js*'
-      - '**.ts*'
-      - 'package*.json'
-      - '.github/workflows/lint.yml'
+      - "**.js*"
+      - "**.ts*"
+      - "package*.json"
+      - ".github/workflows/lint.yml"
   pull_request:
     branches:
       - "master"
     paths:
-      - '**.js*'
-      - '**.ts*'
-      - 'package*.json'
-      - '.github/workflows/lint.yml'
+      - "**.js*"
+      - "**.ts*"
+      - "package*.json"
+      - ".github/workflows/lint.yml"
 
 env:
   NODE_ENV: development
@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['14']
+        node-version: ["14"]
 
     steps:
       - uses: actions/checkout@v2
@@ -37,22 +37,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # ESLint and Prettier must be in  `package.json`
-      - run: yarn install --frozen-lockfile
-        env:
-          NODE_ENV: ${{ env.NODE_ENV }}
-      - name: Run linters
-        if: github.event_name == 'push'
-        uses: wearerequired/lint-action@v1
-        with:
-          auto_fix: true
-          eslint: true
-          prettier: false
+      - name: Install modules
+        run: yarn
 
-      - name: Fail linting on push to PR
-        if: github.event_name == 'pull_request'
-        uses: wearerequired/lint-action@v1
-        with:
-          continue_on_error: false
-          eslint: true
-          prettier: false
+      - run: yarn lint
