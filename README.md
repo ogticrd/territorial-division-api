@@ -4,7 +4,7 @@
 
 ## Tabla de contenidos
 
-- [Servicio transparencia de empleados públicos ](#servicio-transparencia-de-empleados-públicos)
+- [Servicio de división territorial](#servicio-de-división-territorial
   - [Tabla de contenidos](#tabla-de-contenidos)
   - [Descripción y contexto](#descripción-y-contexto)
   - [Referencia del servicio](#referencia-del-servicio)
