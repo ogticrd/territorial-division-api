@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -27,6 +31,7 @@ import {
   Neighborhood,
   SubNeighborhood,
 } from './entities';
+import { TerritorialDivision, TerritorialDivisionLength } from './enum';
 import { QueryStrategy } from './interfaces';
 import {
   DistrictStrategy,
@@ -60,32 +65,14 @@ export class TerritorialDivisionV1Service {
     const strategy: QueryStrategy<Region, QueryRegionDto> =
       new RegionStrategy();
 
-    const regions = await strategy.find(query, this.regionRepo);
-
-    if (!regions) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'Region not found',
-      });
-    }
-
-    return regions;
+    return await strategy.find(query, this.regionRepo);
   }
 
   async getProvinces(query: QueryProvinceDto): Promise<Province[] | Province> {
     const strategy: QueryStrategy<Province, QueryProvinceDto> =
       new ProvinceStrategy();
 
-    const provinces = await strategy.find(query, this.provinceRepo);
-
-    if (!provinces) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'Province not found',
-      });
-    }
-
-    return provinces;
+    return await strategy.find(query, this.provinceRepo);
   }
 
   async getMunicipalities(
@@ -94,48 +81,21 @@ export class TerritorialDivisionV1Service {
     const strategy: QueryStrategy<Municipality, QueryMunicipalityDto> =
       new MunicipalityStrategy();
 
-    const municipalities = await strategy.find(query, this.municipalityRepo);
-
-    if (!municipalities) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'Municipality not found',
-      });
-    }
-
-    return municipalities;
+    return await strategy.find(query, this.municipalityRepo);
   }
 
   async getDistricts(query?: QueryDistrictDto): Promise<District[] | District> {
     const strategy: QueryStrategy<District, QueryDistrictDto> =
       new DistrictStrategy();
 
-    const districts = await strategy.find(query, this.districtRepo);
-
-    if (!districts) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'District not found',
-      });
-    }
-
-    return districts;
+    return await strategy.find(query, this.districtRepo);
   }
 
   async getSections(query?: QuerySectionDto): Promise<Section[] | Section> {
     const strategy: QueryStrategy<Section, QuerySectionDto> =
       new SectionStrategy();
 
-    const sections = await strategy.find(query, this.sectionRepo);
-
-    if (!sections) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'Section not found',
-      });
-    }
-
-    return sections;
+    return await strategy.find(query, this.sectionRepo);
   }
 
   async getNeighborhoods(
@@ -144,16 +104,7 @@ export class TerritorialDivisionV1Service {
     const strategy: QueryStrategy<Neighborhood, QueryNeighborhoodDto> =
       new NeighborhoodStrategy();
 
-    const neighborhoods = await strategy.find(query, this.neighborhoodRepo);
-
-    if (!neighborhoods) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'Neighborhood not found',
-      });
-    }
-
-    return neighborhoods;
+    return await strategy.find(query, this.neighborhoodRepo);
   }
 
   async getSubNeighborhoods(
@@ -162,19 +113,7 @@ export class TerritorialDivisionV1Service {
     const strategy: QueryStrategy<SubNeighborhood, QuerySubNeighborhoodDto> =
       new SubNeighborhoodStrategy();
 
-    const subNeighborhoods = await strategy.find(
-      query,
-      this.subNeighborhoodRepo,
-    );
-
-    if (!subNeighborhoods) {
-      throw new NotFoundException({
-        valid: false,
-        message: 'SubNeighborhood not found',
-      });
-    }
-
-    return subNeighborhoods;
+    return await strategy.find(query, this.subNeighborhoodRepo);
   }
 
   async getRegionProvinces(params: ParamRegionDto): Promise<Province[]> {
@@ -382,5 +321,176 @@ export class TerritorialDivisionV1Service {
     }
 
     return subNeighborhood;
+  }
+
+  async getTerritorialHierarchy(identifier: string) {
+    return this.territorialDivisionFactory(identifier);
+  }
+
+  private async territorialDivisionFactory(identifier: string) {
+    let response = {};
+
+    switch (identifier.length) {
+      case TerritorialDivisionLength.REGION:
+        const region = await this.findByIndentifier(
+          this.regionRepo,
+          identifier,
+          TerritorialDivision.REGION,
+        );
+
+        response = {
+          level: TerritorialDivision.REGION,
+          region: region.identifier,
+          province: null,
+          municipality: null,
+          district: null,
+          section: null,
+          neighborhood: null,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.PROVINCE:
+        const province = await this.findByIndentifier(
+          this.provinceRepo,
+          identifier,
+          TerritorialDivision.PROVINCE,
+        );
+
+        response = {
+          level: TerritorialDivision.PROVINCE,
+          region: province.identifier.slice(0, -2),
+          province: province.identifier,
+          municipality: null,
+          district: null,
+          section: null,
+          neighborhood: null,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.MUNICIPALITY:
+        const municipality = await this.findByIndentifier(
+          this.municipalityRepo,
+          identifier,
+          TerritorialDivision.MUNICIPALITY,
+        );
+
+        response = {
+          level: TerritorialDivision.MUNICIPALITY,
+          region: municipality.identifier.slice(0, -4),
+          province: municipality.identifier.slice(0, -2),
+          municipality: municipality.identifier,
+          district: null,
+          section: null,
+          neighborhood: null,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.DISTRICT:
+        const district = await this.findByIndentifier(
+          this.districtRepo,
+          identifier,
+          TerritorialDivision.DISTRICT,
+        );
+
+        response = {
+          level: TerritorialDivision.DISTRICT,
+          region: district.identifier.slice(0, -6),
+          province: district.identifier.slice(0, -4),
+          municipality: district.identifier.slice(0, -2),
+          district: district.identifier,
+          section: null,
+          neighborhood: null,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.SECTION:
+        const section = await this.findByIndentifier(
+          this.sectionRepo,
+          identifier,
+          TerritorialDivision.SECTION,
+        );
+
+        response = {
+          level: TerritorialDivision.SECTION,
+          region: section.identifier.slice(0, -8),
+          province: section.identifier.slice(0, -6),
+          municipality: section.identifier.slice(0, -4),
+          district: section.identifier.slice(0, -2),
+          section: section.identifier,
+          neighborhood: null,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.NEIGHBORHOOD:
+        const neighborhood = await this.findByIndentifier(
+          this.neighborhoodRepo,
+          identifier,
+          TerritorialDivision.NEIGHBORHOOD,
+        );
+
+        response = {
+          level: TerritorialDivision.NEIGHBORHOOD,
+          region: neighborhood.identifier.slice(0, -11),
+          province: neighborhood.identifier.slice(0, -9),
+          municipality: neighborhood.identifier.slice(0, -7),
+          district: neighborhood.identifier.slice(0, -5),
+          section: neighborhood.identifier.slice(0, -3),
+          neighborhood: neighborhood.identifier,
+          subNeighborhood: null,
+        };
+
+        break;
+      case TerritorialDivisionLength.SUB_NEIGHBORHOOD:
+        const subNeighborhood = await this.findByIndentifier(
+          this.subNeighborhoodRepo,
+          identifier,
+          TerritorialDivision.SUB_NEIGHBORHOOD,
+        );
+
+        response = {
+          level: TerritorialDivision.SUB_NEIGHBORHOOD,
+          region: subNeighborhood.identifier.slice(0, -13),
+          province: subNeighborhood.identifier.slice(0, -11),
+          municipality: subNeighborhood.identifier.slice(0, -9),
+          district: subNeighborhood.identifier.slice(0, -7),
+          section: subNeighborhood.identifier.slice(0, -5),
+          neighborhood: subNeighborhood.identifier.slice(0, -2),
+          subNeighborhood: subNeighborhood.identifier,
+        };
+
+        break;
+
+      default:
+        throw new BadRequestException({
+          valid: false,
+          message: 'Invalid code',
+        });
+    }
+
+    return response;
+  }
+
+  private async findByIndentifier<T>(
+    repo: Repository<T>,
+    identifier: string,
+    level: string,
+  ) {
+    const entity = await repo.findOne({
+      where: { identifier },
+    });
+
+    if (!entity) {
+      throw new NotFoundException({
+        valid: false,
+        message: `${level.charAt(0).toUpperCase() + level.slice(1)} not found`,
+      });
+    }
+
+    return entity;
   }
 }

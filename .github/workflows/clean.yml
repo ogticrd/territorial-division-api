@@ -1,0 +1,35 @@
+name: Deployment cleaner
+
+on:
+  delete:
+    branches:
+      - "*"
+      - "!staging"
+      - "!main"
+  pull_request:
+    branches:
+      - "staging"
+      - "master"
+    types: [ closed ]
+
+env:
+  # Deployment variables
+  PROJECT_NAME: territorial-division
+  GAR_BASE: us-docker.pkg.dev/${{ secrets.GCP_PROJECT }}
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GAR_JSON_KEY }}
+          export_default_credentials: true
+
+      - name: Use gcloud CLI
+        run: gcloud run services delete ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }} --region=${{ secrets.GCP_REGION }} --quiet

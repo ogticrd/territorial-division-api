@@ -1,34 +1,21 @@
-import { Raw, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { QueryRegionDto } from '../dto';
 import { Region } from '../entities';
 import { QueryStrategy } from '../interfaces';
+import { StrategyBuilder } from './builder';
 
 export class RegionStrategy implements QueryStrategy<Region, QueryRegionDto> {
-  find(
+  async find(
     query: QueryRegionDto,
     repository: Repository<Region>,
   ): Promise<Region | Region[]> {
-    if (query.name) {
-      return repository.find({
-        where: {
-          name: Raw((name: string) => `LOWER(${name}) Like '%${query.name}%'`),
-        },
-      });
-    }
+    const builder = new StrategyBuilder<Region>(repository);
 
-    if (query.code) {
-      return repository.findOne({
-        where: { code: query.code },
-      });
-    }
-
-    if (query.identifier) {
-      return repository.findOne({
-        where: { identifier: query.identifier },
-      });
-    }
-
-    return repository.find();
+    return builder
+      .findByName(query.name)
+      .findByCode(query.code)
+      .findByIndentifier(query.identifier)
+      .build();
   }
 }

@@ -1,48 +1,25 @@
-import { Raw, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { QueryMunicipalityDto } from '../dto';
 import { Municipality } from '../entities';
 import { QueryStrategy } from '../interfaces';
+import { StrategyBuilder } from './builder';
 
 export class MunicipalityStrategy
   implements QueryStrategy<Municipality, QueryMunicipalityDto>
 {
-  find(
+  async find(
     query: QueryMunicipalityDto,
     repository: Repository<Municipality>,
   ): Promise<Municipality | Municipality[]> {
-    if (query.name) {
-      return repository.find({
-        where: {
-          name: Raw((name: string) => `LOWER(${name}) Like '%${query.name}%'`),
-        },
-      });
-    }
+    const builder = new StrategyBuilder<Municipality>(repository);
 
-    if (query.code) {
-      return repository.findOne({
-        where: { code: query.code },
-      });
-    }
-
-    if (query.identifier) {
-      return repository.findOne({
-        where: { identifier: query.identifier },
-      });
-    }
-
-    if (query.provinceCode) {
-      return repository.find({
-        where: { provinceCode: query.provinceCode },
-      });
-    }
-
-    if (query.regionCode) {
-      return repository.find({
-        where: { regionCode: query.regionCode },
-      });
-    }
-
-    return repository.find();
+    return builder
+      .findByName(query.name)
+      .findByCode(query.code)
+      .findByIndentifier(query.identifier)
+      .findByRegionCode(query.regionCode)
+      .findByProvinceCode(query.provinceCode)
+      .build();
   }
 }
