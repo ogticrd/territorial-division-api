@@ -1,8 +1,9 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import * as helmet from 'helmet';
 import * as compression from 'compression';
+import * as helmet from 'helmet';
 
+import { DatabaseExceptionFilter, HttpExceptionFilter } from '@common/filters';
 import { AppModule } from './app.module';
 import { configSwagger } from './config';
 
@@ -22,6 +23,10 @@ async function bootstrap() {
     }),
   );
   app.enableVersioning();
+  app.useGlobalFilters(
+    new HttpExceptionFilter(),
+    new DatabaseExceptionFilter(),
+  );
 
   configSwagger(app, AppModule.apiVersion);
 

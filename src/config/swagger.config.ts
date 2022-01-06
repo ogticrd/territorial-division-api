@@ -1,8 +1,9 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 
-const title = 'Territorial Division';
-const description = 'Territorial Division api definition.';
+const title = 'Territorial Division RESTful API';
+const description =
+  'This is the Dominican Republic territorial division from the ONE.';
 
 /**
  * Setup swagger in the application boostrap
@@ -13,6 +14,7 @@ export const configSwagger = (app: INestApplication, apiVersion: string) => {
     .setTitle(title)
     .setDescription(description)
     .setVersion(apiVersion)
+    .setContact('OGTIC', 'https://ogtic.gob.do', 'info@ogtic.gob.do')
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {

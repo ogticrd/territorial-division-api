@@ -6,6 +6,10 @@ import { QueryBase } from './base';
 export class QueryProvinceDto extends QueryBase {
   @IsString()
   @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    type: String,
+    description: 'Parent region code',
+  })
   regionCode: string;
 }
