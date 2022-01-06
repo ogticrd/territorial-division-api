@@ -1,0 +1,1855 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/v1/territories/regions": {
+            "get": {
+                "operationId": "getRegions",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseRegionDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/provinces": {
+            "get": {
+                "operationId": "getProvinces",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent region code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseProvinceDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/municipalities": {
+            "get": {
+                "operationId": "getMunicipalities",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent province code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent region code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMunicipalityDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/districts": {
+            "get": {
+                "operationId": "getDistricts",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent municipality code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent province code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent region code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseDistrictDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/sections": {
+            "get": {
+                "operationId": "getSections",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent district code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent municipality code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent province code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent region code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSectionDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/neighborhoods": {
+            "get": {
+                "operationId": "getNeighborhoods",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/sub-neighborhoods": {
+            "get": {
+                "operationId": "getSubNeighborhoods",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": false,
+                        "in": "query",
+                        "description": "Name of the territorial division",
+                        "example": "La Altagracia",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "required": false,
+                        "in": "query",
+                        "description": "Code of the territorial division",
+                        "example": "01",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "identifier",
+                        "required": false,
+                        "in": "query",
+                        "description": "Identifier of the territorial division",
+                        "example": "0101",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "neighborhoodCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent neighborhood code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent section code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent district code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent municipality code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent province code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionCode",
+                        "required": false,
+                        "in": "query",
+                        "description": "Parent region code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSubNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces": {
+            "get": {
+                "operationId": "getRegionProvinces",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseProvinceDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}": {
+            "get": {
+                "operationId": "getRegionProvince",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseProvinceDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities": {
+            "get": {
+                "operationId": "getProvinceMunicipalities",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMunicipalityDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}": {
+            "get": {
+                "operationId": "getProvinceMunicipality",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseMunicipalityDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts": {
+            "get": {
+                "operationId": "getMunicipalityDistricts",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseDistrictDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}": {
+            "get": {
+                "operationId": "getMunicipalityDistrict",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseDistrictDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections": {
+            "get": {
+                "operationId": "getDisctrictSections",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSectionDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections/{sectionCode}": {
+            "get": {
+                "operationId": "getDisctrictSection",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSectionDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections/{sectionCode}/neighborhoods": {
+            "get": {
+                "operationId": "getSectionNeighborhoods",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections/{sectionCode}/neighborhoods/{neighborhoodCode}": {
+            "get": {
+                "operationId": "getSectionNeighborhood",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "neighborhoodCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections/{sectionCode}/neighborhoods/{neighborhoodCode}/sub-neighborhoods": {
+            "get": {
+                "operationId": "getNeighborhoodSubNeighborhoods",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "neighborhoodCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSubNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/regions/{regionCode}/provinces/{provinceCode}/municipalities/{municipalityCode}/districts/{districtCode}/sections/{sectionCode}/neighborhoods/{neighborhoodCode}/sub-neighborhoods/{subNbeighborhoodCode}": {
+            "get": {
+                "operationId": "getNeighborhoodSubNeighborhood",
+                "parameters": [
+                    {
+                        "name": "regionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "provinceCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "municipalityCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "districtCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sectionCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "neighborhoodCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "subNeighborhoodCode",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResponseSubNeighborhoodDto"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundResponseDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        },
+        "/v1/territories/hierarchy/{code}": {
+            "get": {
+                "operationId": "getTerritorialHierarchy",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Territorial divisions"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Territorial Division RESTful API",
+        "description": "This is the Dominican Republic territorial division from the ONE.",
+        "version": "v1",
+        "contact": {
+            "name": "OGTIC",
+            "url": "https://ogtic.gob.do",
+            "email": "info@ogtic.gob.do"
+        }
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "ResponseRegionDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BadRequest": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "default": 400
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "message",
+                    "timestamp"
+                ]
+            },
+            "BadRequestResponseDto": {
+                "type": "object",
+                "properties": {
+                    "valid": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "BadRequest": {
+                        "$ref": "#/components/schemas/BadRequest"
+                    }
+                },
+                "required": [
+                    "valid",
+                    "BadRequest"
+                ]
+            },
+            "NotFoundResponse": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "default": 404
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "message",
+                    "timestamp"
+                ]
+            },
+            "NotFoundResponseDto": {
+                "type": "object",
+                "properties": {
+                    "valid": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/NotFoundResponse"
+                    }
+                },
+                "required": [
+                    "valid",
+                    "data"
+                ]
+            },
+            "ResponseProvinceDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseMunicipalityDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseDistrictDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "municipalityCode": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseSectionDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "districtCode": {
+                        "type": "string"
+                    },
+                    "municipalityCode": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseNeighborhoodDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "sectionCode": {
+                        "type": "string"
+                    },
+                    "districtCode": {
+                        "type": "string"
+                    },
+                    "municipalityCode": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ResponseSubNeighborhoodDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "identifier": {
+                        "type": "string"
+                    },
+                    "neighborhoodCode": {
+                        "type": "string"
+                    },
+                    "sectionCode": {
+                        "type": "string"
+                    },
+                    "districtCode": {
+                        "type": "string"
+                    },
+                    "municipalityCode": {
+                        "type": "string"
+                    },
+                    "provinceCode": {
+                        "type": "string"
+                    },
+                    "regionCode": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
