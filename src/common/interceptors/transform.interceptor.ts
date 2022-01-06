@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -22,7 +22,7 @@ export class TransformInterceptor<T> implements NestInterceptor<Partial<T>, T> {
   ): Observable<T> {
     return next.handle().pipe(
       map((data: T) => {
-        const response = plainToClass(this.classType, data);
+        const response = plainToInstance(this.classType, data);
 
         if (!this.isValidTransformation(response) || data['statusCode']) {
           return data;
