@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ConnectionOptions } from 'typeorm';
 
-export const DatabaseProvider: DynamicModule = TypeOrmModule.forRootAsync({
+export const PostgresProvider: DynamicModule = TypeOrmModule.forRootAsync({
   inject: [ConfigService],
   async useFactory(config: ConfigService) {
     const dbConfig = {
