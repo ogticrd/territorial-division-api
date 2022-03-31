@@ -89,12 +89,12 @@ jobs:
           flags: |
             --vpc-connector=projects/${{ secrets.GCP_PROJECT }}/locations/${{ secrets.GCP_REGION }}/connectors/${{ secrets.GCP_REGION }}
           env_vars: |
-            NODE_ENV=${{ env.NODE_ENV }},
-            DB_HOST=${{ secrets.DB_HOST }},
-            DB_PORT=${{ secrets.DB_PORT }},
-            DB_USER=${{ secrets.DB_USER }},
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }},
-            DB_NAME=${{ secrets.DB_NAME }},
+            NODE_ENV=${{ env.NODE_ENV }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_NAME=${{ secrets.DB_NAME }}
             API_VERSION=${{ needs.versioning.outputs.version }}
 
       - name: Testing CR service

@@ -34,15 +34,19 @@ jobs:
       matrix:
         node: ["14"]
     steps:
-      - uses: actions/checkout@v2
+      - name: Cheking out the code
+        uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-        env:
-          NODE_ENV: development
-      - run: yarn test
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Running tests
+        run: yarn test
 
   build:
     needs: [test, versioning]
@@ -66,7 +70,7 @@ jobs:
       - name: Login to GAR
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.GAR_BASE}}
+          registry: ${{ env.GAR_BASE }}
           username: _json_key
           password: ${{ secrets.GAR_JSON_KEY }}
 
@@ -75,7 +79,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           target: release
-          tags: ${{ env.GAR_BASE }}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
+          tags: ${{ env.GAR_BASE }}/${{ env.PROJECT_NAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
           build-args: |
             NODE_ENV=${{ env.NODE_ENV }}
             SKIP_PREFLIGHT_CHECK=${{ env.SKIP_PREFLIGHT_CHECK }}
@@ -105,12 +109,12 @@ jobs:
           flags: |
             --vpc-connector=projects/${{ secrets.GCP_PROJECT }}/locations/${{ secrets.GCP_REGION }}/connectors/${{ secrets.GCP_REGION }}
           env_vars: |
-            NODE_ENV=${{ env.NODE_ENV }},
-            DB_HOST=${{ secrets.DB_HOST }},
-            DB_PORT=${{ secrets.DB_PORT }},
-            DB_USER=${{ secrets.DB_USER }},
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }},
-            DB_NAME=${{ secrets.DB_NAME }},
+            NODE_ENV=${{ env.NODE_ENV }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_NAME=${{ secrets.DB_NAME }}
             API_VERSION=${{ needs.versioning.outputs.version }}
 
       - name: Set up Cloud SDK
