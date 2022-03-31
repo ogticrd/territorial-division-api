@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           target: release
-          tags: ${{ env.GAR_BASE }}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
+          tags: ${{ env.GAR_BASE }}/${{ env.PROJECT_NAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
           build-args: |
             NODE_ENV=${{ env.NODE_ENV }}
             SKIP_PREFLIGHT_CHECK=true
@@ -82,7 +82,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
-          image: ${{ env.GAR_BASE}}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
+          image: ${{ env.GAR_BASE }}/${{ env.PROJECT_NAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
           service: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.version }}
           credentials: ${{ secrets.GAR_JSON_KEY }}
           region: ${{ secrets.GCP_REGION }}
