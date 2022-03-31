@@ -11,7 +11,7 @@ on:
       - "Dockerfile"
       - ".github/workflows/development.yml"
     types:
-      - opened
+      - synchronize
 
 env:
   PROJECT_NAME: territorial-division
