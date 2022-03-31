@@ -5,13 +5,13 @@ on:
     branches:
       - "master"
     paths:
-      - '**.js*'
-      - '**.ts*'
-      - 'package*.json'
-      - 'Dockerfile'
-      - 'entrypoint.sh'
-      - '.github/workflows/development.yml'
-    types: [ opened, synchronize, reopened, labeled ]
+      - "**.js*"
+      - "**.ts*"
+      - "package*.json"
+      - "Dockerfile"
+      - "entrypoint.sh"
+      - ".github/workflows/development.yml"
+    types: [closed]
 
 env:
   # Deployment variables
@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        node: ['14']
+        node: ["14"]
 
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
       - run: yarn test
 
   build:
-    needs: ['test']
+    needs: ["test"]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
