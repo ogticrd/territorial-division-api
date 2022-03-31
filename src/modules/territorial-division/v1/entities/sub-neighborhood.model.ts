@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseModel } from './base.model';
 
 @Entity({ name: 'sub_neighborhoods' })
