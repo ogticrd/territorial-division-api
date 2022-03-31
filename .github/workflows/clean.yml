@@ -1,4 +1,4 @@
-name: Deployment cleaner
+name: Cleaner
 
 on:
   delete:
