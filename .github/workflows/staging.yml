@@ -1,15 +1,14 @@
-name: QA deployment
+name: Staging Deployment
 
 on:
   push:
     branches:
-      - "master"
+      - main
     paths:
       - "**.js*"
       - "**.ts*"
       - "package*.json"
       - "Dockerfile"
-      - "entrypoint.sh"
       - ".github/workflows/staging.yml"
 
 env:
@@ -17,7 +16,7 @@ env:
   GAR_BASE: us-docker.pkg.dev/${{ secrets.GCP_PROJECT }}
   SKIP_PREFLIGHT_CHECK: true
   DISABLE_ESLINT_PLUGIN: true
-  NODE_ENV: production
+  NODE_ENV: staging
 
 jobs:
   versioning:
@@ -27,14 +26,13 @@ jobs:
     steps:
       - name: Setting API Version
         id: set
-        run: echo "::set-output name=version::staging"
+        run: echo "::set-output name=version::${{ env.NODE_ENV }}"
 
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node: ["14"]
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node }}
@@ -49,7 +47,6 @@ jobs:
   build:
     needs: [test, versioning]
     runs-on: ubuntu-latest
-
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
@@ -93,12 +90,12 @@ jobs:
   deploy:
     needs: [build, versioning]
     runs-on: ubuntu-latest
-
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
 
-      - id: deploy
+      - name: Deploy to Cloud Run
+        id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           image: ${{ env.GAR_BASE}}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
@@ -125,9 +122,9 @@ jobs:
 
       - name: Allow unauthenticated calls to the service
         run: |
-          gcloud run services add-iam-policy-binding ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }} \
+          gcloud run services add-iam-policy-binding ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.version }} \
           --region=${{ secrets.GCP_REGION }} --member=allUsers --role=roles/run.invoker
 
-      # Example of using the output
-      - id: test
+      - name: Testing CR service
+        id: test
         run: curl "${{ steps.deploy.outputs.url }}"
