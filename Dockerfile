@@ -17,7 +17,6 @@ RUN yarn install --frozen-lockfile
 #####################################
 FROM node:lts-alpine as builder
 
-# get the node environment to use
 ARG NODE_ENV
 ENV NODE_ENV ${NODE_ENV:-production}
 
