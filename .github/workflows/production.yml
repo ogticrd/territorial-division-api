@@ -14,7 +14,6 @@ env:
 jobs:
   versioning:
     runs-on: ubuntu-latest
-
     outputs:
       version: ${{ steps.set.outputs.version }}
     steps:
@@ -30,7 +29,7 @@ jobs:
         run: echo "::set-output name=version::${{ steps.get.outputs.result }}"
 
   build:
-    needs: ['versioning']
+    needs: [versioning]
     runs-on: ubuntu-latest
 
     steps:
@@ -65,7 +64,6 @@ jobs:
           tags: ${{ env.GAR_BASE }}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
           build-args: |
             NODE_ENV=${{ env.NODE_ENV }}
-            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
             SKIP_PREFLIGHT_CHECK=true
             DISABLE_ESLINT_PLUGIN=false
           push: true
@@ -99,7 +97,7 @@ jobs:
             DB_USER=${{ secrets.DB_USER }},
             DB_PASSWORD=${{ secrets.DB_PASSWORD }},
             DB_NAME=${{ secrets.DB_NAME }},
-            API_VERSION=${{ needs.versioning.outputs.api_version }}
+            API_VERSION=${{ needs.versioning.outputs.version }}
 
       - name: Testing Service with curl
         run: curl "${{ steps.deploy.outputs.url }}"

@@ -6,11 +6,13 @@ on:
       - "*"
       - "!staging"
       - "!main"
+      - "!master"
   pull_request:
     branches:
       - "staging"
       - "master"
-    types: [ closed ]
+      - "main"
+    types: [closed]
 
 env:
   # Deployment variables
