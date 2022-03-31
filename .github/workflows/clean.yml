@@ -6,16 +6,14 @@ on:
       - "*"
       - "!staging"
       - "!main"
-      - "!master"
   pull_request:
     branches:
       - "staging"
-      - "master"
       - "main"
-    types: [closed]
+    types:
+      - closed
 
 env:
-  # Deployment variables
   PROJECT_NAME: territorial-division
   GAR_BASE: us-docker.pkg.dev/${{ secrets.GCP_PROJECT }}
 
@@ -33,5 +31,5 @@ jobs:
           service_account_key: ${{ secrets.GAR_JSON_KEY }}
           export_default_credentials: true
 
-      - name: Use gcloud CLI
+      - name: Removing CR service
         run: gcloud run services delete ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }} --region=${{ secrets.GCP_REGION }} --quiet
