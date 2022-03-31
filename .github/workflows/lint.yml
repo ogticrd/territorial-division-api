@@ -11,26 +11,22 @@ on:
       - ".github/workflows/lint.yml"
   pull_request:
     branches:
-      - "master"
+      - main
     paths:
       - "**.js*"
       - "**.ts*"
       - "package*.json"
       - ".github/workflows/lint.yml"
 
-env:
-  NODE_ENV: development
-
 jobs:
   lint:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: ["14"]
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Cheking out the code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -40,4 +36,5 @@ jobs:
       - name: Install modules
         run: yarn
 
-      - run: yarn lint
+      - name: Lintng the code
+        run: yarn lint

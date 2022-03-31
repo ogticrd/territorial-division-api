@@ -1,17 +1,17 @@
-name: Dev deployment
+name: Development Deployment
 
 on:
   pull_request:
     branches:
-      - "master"
+      - main
     paths:
       - "**.js*"
       - "**.ts*"
       - "package*.json"
       - "Dockerfile"
-      - "entrypoint.sh"
       - ".github/workflows/development.yml"
-    types: [closed]
+    types:
+      - opened
 
 env:
   PROJECT_NAME: territorial-division
@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Setting API Version
         id: set
-        run: echo "::set-output name=version::dev"
+        run: echo "::set-output name=version::${{ env.NODE_ENV }}"
 
   test:
     runs-on: ubuntu-latest
@@ -36,19 +36,24 @@ jobs:
       matrix:
         node: ["14"]
     steps:
-      - uses: actions/checkout@v2
+      - name: Cheking out the code
+        uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Running tests
+        run: yarn test
 
   build:
     needs: [test, versioning]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
@@ -93,12 +98,12 @@ jobs:
     needs: [build, versioning]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-
     steps:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
 
-      - id: deploy
+      - name: Deploy to Cloud Run
+        id: deploy
         uses: google-github-actions/deploy-cloudrun@v0.9.0
         with:
           image: ${{ env.GAR_BASE}}/${{env.PROJECT_NAME}}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
@@ -125,11 +130,11 @@ jobs:
 
       - name: Allow unauthenticated calls to the service
         run: |
-          gcloud run services add-iam-policy-binding ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }} \
+          gcloud run services add-iam-policy-binding ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ needs.versioning.outputs.version }} \
           --region=${{ secrets.GCP_REGION }} --member=allUsers --role=roles/run.invoker --quiet
 
-      # Example of using the output
-      - id: test
+      - name: Testing CR service
+        id: test
         run: curl "${{ steps.deploy.outputs.url }}"
 
       - name: Comment PR with DEV URL
