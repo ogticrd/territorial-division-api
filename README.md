@@ -4,7 +4,7 @@
 
 ## Tabla de contenidos
 
-- [Servicio de división territorial](#servicio-de-división-territorial
+- [Servicio de división territorial](#servicio-de-división-territorial)
   - [Tabla de contenidos](#tabla-de-contenidos)
   - [Descripción y contexto](#descripción-y-contexto)
   - [Referencia del servicio](#referencia-del-servicio)
