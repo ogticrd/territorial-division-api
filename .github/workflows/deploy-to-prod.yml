@@ -1,0 +1,34 @@
+name: Deploy to production
+
+on:
+  release:
+    types:
+      - published
+
+concurrency:
+  # Ensures that only one workflow task will run at a time. Previous builds, if
+  # already in process, will get cancelled. Only the latest commit will be allowed
+  # to run, cancelling any workflows in between
+  group: ${{ github.workflow }}-${{ github.job }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-docker-image.yml
+    with:
+      environment: production
+      dockerfile_path: ./Dockerfile
+      dockerfile_target: release
+      app_name: ${{ vars.APP_NAME }}
+      registry: ${{ vars.GCP_REGISTRY}}
+    secrets: inherit
+
+  deploy:
+    needs: ["build"]
+    uses: ./.github/workflows/cloudrun-deploy.yml
+    with:
+      environment: production
+      project: ${{ vars.GCP_PROJECT }}
+      region: us-east1
+      image: ${{ vars.GCP_IMAGE}}@${{ needs.build.outputs.image_digest }}
+    secrets: inherit

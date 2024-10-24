@@ -1,0 +1,92 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: false
+        type: string
+      image_digest:
+        required: false
+        type: string
+      region:
+        required: true
+        type: string
+      project:
+        required: true
+        type: string
+      environment:
+        required: false
+        type: string
+      default_name:
+        required: false
+        type: string
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set.outputs.version }}
+    steps:
+      - name: Getting API Version
+        id: get
+        uses: actions/github-script@v6
+        if: ${{ github.event_name == 'release' }}
+        with:
+          result-encoding: string
+          script: |
+            return context.payload.release.tag_name.substring(0,2)
+      - name: Setting API Version
+        id: set
+        run: echo "version=${{ steps.get.outputs.result }}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Deploy to Cloud Run
+    needs: ['versioning']
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4.4.1
+
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@v1.1.1
+        with:
+          credentials_json: ${{ secrets.GAR_JSON_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1.1.1
+
+      - name: Deploy to cloud run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2.6.0
+        with:
+          image: ${{ inputs.image }}
+          service: ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{ inputs.default_name || needs.versioning.outputs.version || env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG }}
+          region: ${{ inputs.region }}
+          flags: |
+            --vpc-connector=projects/${{ secrets.GCP_PROJECT }}/locations/${{ secrets.GCP_REGION }}/connectors/${{ secrets.GCP_REGION }}
+          env_vars: |
+            NODE_ENV=${{ vars.NODE_ENV }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            API_VERSION=${{ needs.versioning.outputs.version }}
+
+
+      - name: Allow unauthenticated calls to the service
+        run: |
+          gcloud run services add-iam-policy-binding ${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}-${{  needs.versioning.outputs.version || env.GITHUB_HEAD_REF_SLUG || env.GITHUB_REF_SLUG  }} \
+          --region=${{ inputs.region }} --member=allUsers --role=roles/run.invoker --quiet
+
+      - name: Test service with cURL
+        run: curl "${{ steps.deploy.outputs.url }}"
