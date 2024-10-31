@@ -1,0 +1,63 @@
+---
+name: 🐛 Bug report
+description: Crear un informe de error
+labels:
+  - bug
+assignees:
+  - marluanespiritusanto
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por tomarse el tiempo para completar este informe de error!
+  - type: textarea
+    attributes:
+      label: Comportamiento Actual
+      description: Por favor ingrese una descripción explícita del problema (issue)
+      placeholder: Descripción breve y explícita de su incidente, incluido el código de estado HTTP y cualquier mensaje de error relevante.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: "Screenshots"
+      description: Si corresponde, agregue capturas de pantalla para ayudar a explicar su problema.
+      value: |
+        ![DESCRIPCION](LINK.png)
+      render: bash
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Comportamiento Esperado
+      description: Una descripción concisa de lo que esperaba que suceda.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Version del API & Ambiente
+      description: Una descripción del entorno
+      placeholder: |
+        API Version: [e.g., v1.2.2]
+        Ambiente: [e.g., production, staging, localhost]
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Detalles del request
+      description: |
+        Detalles del request
+      placeholder: |
+        Ejemplo del request
+        GET /api/endpoint HTTP/1.1
+        Host: api.example.com
+        Authorization: Bearer your-token-here
+    validations:
+      required: false 
+  - type: textarea
+    attributes:
+      label: ¿Algo más?
+      description: |
+        ¿Enlaces? ¿Referencias? ¡Cualquier cosa que nos brinde más contexto sobre el problema que encontro!
+    validations:
+      required: false

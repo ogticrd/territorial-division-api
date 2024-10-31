@@ -1,0 +1,35 @@
+name: "❓ Question"
+description: "Haz una pregunta sobre el uso de la API"
+labels: 
+  - question
+assignees: marluanespiritusanto
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Question**
+        
+        Describe tu pregunta en detalle. Proporciona toda la información relevante posible, incluido lo que intentas lograr con la API.
+    validations:
+      required: true
+  - type: textarea
+    id: question_details
+    attributes:
+      label: "Detalles de tu pregunta"
+      description: "Describe tu pregunta o problema aquí. Sé lo más detallado posible."
+      placeholder: "Proporcione detalles específicos sobre su pregunta."
+    validations:
+      required: false
+  - type: input
+    id: relevant_endpoints
+    attributes:
+      label: "API Endpoints relevantes"
+      description: "Enumere los Endpoints de API específicos involucrados(e.g., POST /api/resource)."
+      placeholder: "e.g., POST /api/resource"
+    validations:
+      required: false
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Informacion Adicional"
+      description: "Agregue cualquier otro contexto, capturas de pantalla o información que pueda ayudar a comprender su pregunta."
